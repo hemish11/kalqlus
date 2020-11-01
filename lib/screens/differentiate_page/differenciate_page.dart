@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kalqlus/components/background.dart';
 
-class IntegratePage extends StatefulWidget {
+class DifferentiatePage extends StatefulWidget {
   @override
-  IntegratePageState createState() => IntegratePageState();
+  _DifferentiatePageState createState() => _DifferentiatePageState();
 }
 
-class IntegratePageState extends State<IntegratePage> {
+class _DifferentiatePageState extends State<DifferentiatePage> {
   @override
   Widget build(BuildContext context) {
     return Background(
