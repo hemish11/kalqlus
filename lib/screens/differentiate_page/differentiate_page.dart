@@ -1,3 +1,4 @@
+import 'package:catex/catex.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalqlus/colors.dart';
@@ -73,13 +74,13 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: SingleChildScrollView(
-                child: Text(
-                  'Input: ',
+                scrollDirection: Axis.horizontal,
+                child: DefaultTextStyle.merge(
                   style: GoogleFonts.lato(
                     fontSize: 40,
-                    fontWeight: FontWeight.w600,
                     color: CustomColors.kFontColor,
                   ),
+                  child: CaTeX(r'\text{Input: }\frac{d}{dx}\text{ }(x^2 + 2x)'),
                 ),
               ),
             ),
@@ -90,13 +91,13 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: SingleChildScrollView(
-                child: Text(
-                  'Output: ',
+                scrollDirection: Axis.horizontal,
+                child: DefaultTextStyle.merge(
                   style: GoogleFonts.lato(
                     fontSize: 40,
-                    fontWeight: FontWeight.w600,
                     color: CustomColors.kFontColor,
                   ),
+                  child: CaTeX(r'\text{Output: }2x + 2'),
                 ),
               ),
             ),
@@ -108,7 +109,7 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  'Differenciate',
+                  'Differentiate',
                   style: GoogleFonts.lato(
                     fontSize: 40,
                     fontWeight: FontWeight.w700,

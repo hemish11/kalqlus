@@ -21,13 +21,27 @@ class Button extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             if (text == 'Integrate')
-              Text(
-                '∫',
-                style: GoogleFonts.lato(
-                  fontSize: 140,
-                  fontWeight: FontWeight.w400,
-                  color: CustomColors.kAccent,
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '∫',
+                    style: GoogleFonts.lato(
+                      fontSize: 140,
+                      fontWeight: FontWeight.w400,
+                      color: CustomColors.kAccent,
+                    ),
+                  ),
+                  Text(
+                    'dx',
+                    style: GoogleFonts.lato(
+                      fontSize: 100,
+                      fontWeight: FontWeight.w400,
+                      color: CustomColors.kAccent,
+                    ),
+                  ),
+                ],
               )
             else
               Column(
