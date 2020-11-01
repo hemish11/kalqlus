@@ -4,12 +4,12 @@ import 'package:kalqlus/colors.dart';
 import 'package:kalqlus/components/background.dart';
 import 'package:kalqlus/components/card.dart';
 
-class IntegratePage extends StatefulWidget {
+class DifferentiatePage extends StatefulWidget {
   @override
-  _IntegratePageState createState() => _IntegratePageState();
+  _DifferentiatePageState createState() => _DifferentiatePageState();
 }
 
-class _IntegratePageState extends State<IntegratePage> {
+class _DifferentiatePageState extends State<DifferentiatePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -55,7 +55,7 @@ class _IntegratePageState extends State<IntegratePage> {
                 'Add Term',
                 style: GoogleFonts.lato(
                   fontSize: 40,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   color: CustomColors.kFontColor,
                 ),
               ),
@@ -71,7 +71,7 @@ class _IntegratePageState extends State<IntegratePage> {
                   'Input: ',
                   style: GoogleFonts.lato(
                     fontSize: 40,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                     color: CustomColors.kFontColor,
                   ),
                 ),
@@ -88,7 +88,7 @@ class _IntegratePageState extends State<IntegratePage> {
                   'Output: ',
                   style: GoogleFonts.lato(
                     fontSize: 40,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                     color: CustomColors.kFontColor,
                   ),
                 ),
@@ -102,7 +102,7 @@ class _IntegratePageState extends State<IntegratePage> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  'Integrate',
+                  'Differenciate',
                   style: GoogleFonts.lato(
                     fontSize: 40,
                     fontWeight: FontWeight.w700,

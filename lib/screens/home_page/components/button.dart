@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalqlus/colors.dart';
-import 'package:kalqlus/screens/home_page/components/card.dart';
+import 'package:kalqlus/components/card.dart';
 
 class Button extends StatelessWidget {
   final String text;

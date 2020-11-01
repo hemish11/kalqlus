@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalqlus/colors.dart';
 import 'package:kalqlus/components/background.dart';
-import 'package:kalqlus/screens/differentiate_page/differenciate_page.dart';
+import 'package:kalqlus/screens/differentiate_page/differentiate_page.dart';
 import 'package:kalqlus/screens/home_page/components/button.dart';
-import 'package:kalqlus/screens/home_page/components/card.dart';
+import 'package:kalqlus/components/card.dart';
 import 'package:kalqlus/screens/integrate_page/integrate_page.dart';
 
 class HomePage extends StatefulWidget {

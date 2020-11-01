@@ -4,8 +4,9 @@ import 'package:kalqlus/colors.dart';
 class CustomCard extends StatefulWidget {
   final Size size;
   final Widget child;
+  final Alignment alignment;
 
-  CustomCard({Key key, @required this.size, this.child}) : super(key: key);
+  CustomCard({Key key, @required this.size, this.child, this.alignment = Alignment.center}) : super(key: key);
 
   @override
   _CustomCardState createState() => _CustomCardState();
@@ -55,18 +56,18 @@ class _CustomCardState extends State<CustomCard> {
           boxShadow: [
             BoxShadow(
               color: CustomColors.kLight,
-              offset: Offset(-10, -10),
-              blurRadius: 20,
+              offset: Offset(-7, -7),
+              blurRadius: 10,
             ),
             BoxShadow(
               color: CustomColors.kDark,
-              offset: Offset(10, 10),
-              blurRadius: 20,
+              offset: Offset(7, 7),
+              blurRadius: 10,
             ),
           ],
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Center(child: widget.child),
+        child: Align(alignment: widget.alignment, child: widget.child),
       ),
     );
   }
