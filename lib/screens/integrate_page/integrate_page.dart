@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kalqlus/colors.dart';
 import 'package:kalqlus/components/background.dart';
 import 'package:kalqlus/components/card.dart';
+import 'package:kalqlus/screens/add_term_page/add_term_page.dart';
 
 class IntegratePage extends StatefulWidget {
   @override
@@ -48,7 +49,12 @@ class _IntegratePageState extends State<IntegratePage> {
             ],
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddTermPage(),
+              ),
+            ),
             child: CustomCard(
               size: Size(size.width - 40, size.height * 0.1),
               child: Text(
