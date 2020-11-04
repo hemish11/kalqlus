@@ -4,6 +4,13 @@ class Equation {
   static String intEquation = '';
 
   static String toLatex(String equation) {
-    return equation.replaceAll(')/(', '}{').replaceAll('(', '\\frac{').replaceAll(')', '}');
+    if (!(equation.contains('sin') ||
+        equation.contains('cos') ||
+        equation.contains('tan') ||
+        equation.contains('cot') ||
+        equation.contains('sec') ||
+        equation.contains('csc')))
+      return equation.replaceAll(')/(', '}{').replaceAll('(', '\\frac{').replaceAll(')', '}');
+      else return equation;
   }
 }

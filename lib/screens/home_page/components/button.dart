@@ -1,3 +1,4 @@
+import 'package:catex/catex.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalqlus/colors.dart';
@@ -22,53 +23,35 @@ class Button extends StatelessWidget {
           children: [
             if (text == 'Integrate')
               Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '∫',
+                    '∫ ',
                     style: GoogleFonts.lato(
-                      fontSize: 140,
+                      fontSize: 110,
                       fontWeight: FontWeight.w400,
                       color: CustomColors.kAccent,
                     ),
                   ),
-                  Text(
-                    'dx',
+                  DefaultTextStyle.merge(
                     style: GoogleFonts.lato(
-                      fontSize: 100,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 60,
                       color: CustomColors.kAccent,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ),
+                    child: CaTeX(r'f(x) dx'),
+                  )
                 ],
               )
             else
-              Column(
-                children: [
-                  Text(
-                    'd',
-                    style: GoogleFonts.lato(
-                      fontSize: 60,
-                      fontWeight: FontWeight.w600,
-                      color: CustomColors.kAccent,
-                    ),
-                  ),
-                  Divider(
-                    color: CustomColors.kAccent,
-                    thickness: 6,
-                    indent: size.width * 0.32,
-                    endIndent: size.width * 0.32,
-                  ),
-                  Text(
-                    'dx',
-                    style: GoogleFonts.lato(
-                      fontSize: 60,
-                      fontWeight: FontWeight.w600,
-                      color: CustomColors.kAccent,
-                    ),
-                  ),
-                ],
+              DefaultTextStyle.merge(
+                style: GoogleFonts.lato(
+                  fontSize: 75,
+                  color: CustomColors.kAccent,
+                  fontWeight: FontWeight.w600,
+                ),
+                child: CaTeX(r'\frac{d}{dx}\text{ }f(x)'),
               ),
             Text(
               text,

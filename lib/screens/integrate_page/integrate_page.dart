@@ -114,7 +114,7 @@ class _IntegratePageState extends State<IntegratePage> {
                       fontSize: 40,
                       color: CustomColors.kFontColor,
                     ),
-                    child: CaTeX(r'\text{Output: }' + Equation.toLatex(Equation.intEquation).replaceAll('*', '')),
+                    child: CaTeX(r'\text{Output: }' + Equation.toLatex(Equation.intEquation).replaceAll('*', '') + '+c'),
                   ),
                 ),
               ),

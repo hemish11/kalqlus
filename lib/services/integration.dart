@@ -55,7 +55,7 @@ class Integration {
     List<int> prodList;
 
     if (double.tryParse(func) != null) {
-      func = 'x';
+      func = func + 'x';
     } else {
       if (!func.contains('^') && !func.contains('/')) func = func.substring(0, func.indexOf('x') + 1) + '^1/1';
       if (!func.contains('^'))

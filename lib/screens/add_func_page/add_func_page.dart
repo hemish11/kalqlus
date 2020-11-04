@@ -21,8 +21,6 @@ class AddFuncPage extends StatefulWidget {
 }
 
 class _AddFuncPageState extends State<AddFuncPage> {
-  int radioVal = 0;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -53,8 +51,8 @@ class _AddFuncPageState extends State<AddFuncPage> {
               ),
               CustomTextField(
                 onSubmitted: (val) {
-                  Equation.diffEquation = Differentiation.derivative(val);
-                  Equation.intEquation = Integration.integrate(val);
+                  if (widget.prevPage == 'Differentiate') Equation.diffEquation = Differentiation.derivative(val);
+                  if (widget.prevPage == 'Integrate') Equation.intEquation = Integration.integrate(val);
 
                   setState(() {
                     Equation.equation = val;
