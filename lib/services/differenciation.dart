@@ -1,6 +1,22 @@
-class Differenciation {
+class Differentiation {
   static String derivative(String func) {
-    if (func.contains('sin') ||
+    if (func.contains('+'))
+      func = sumRule(func);
+    else if (func.contains(')*(')) {
+      List<String> splitEqn = func.split(')*(');
+
+      String a = splitEqn[0].replaceRange(0, 1, '');
+      String b = splitEqn[1].replaceRange(splitEqn[1].length - 1, splitEqn[1].length, '');
+
+      func = product(a, sumRule(b)) + '+' + product(sumRule(a), b).replaceAll('.0', '');
+    } else if (func.contains(')/(')) {
+      List<String> splitEqn = func.split(')*(');
+
+      String a = splitEqn[0].replaceRange(0, 1, '');
+      String b = splitEqn[1].replaceRange(splitEqn[1].length - 1, splitEqn[1].length, '');
+
+      func = '(' + product(a, sumRule(b)) + '-' + product(sumRule(a), b) + ')/' + product(a, a).replaceAll('.0', '');
+    } else if (func.contains('sin') ||
         func.contains('cos') ||
         func.contains('tan') ||
         func.contains('cot') ||
@@ -11,6 +27,162 @@ class Differenciation {
       func = diffVarPow(func);
     else
       func = diffPow(func);
+
+    return func;
+  }
+
+  static int findDegree(String poly) {
+    List<int> powers = List();
+    int index = poly.indexOf('^');
+    int degree;
+
+    poly += ' ';
+
+    if (!poly.contains('^') && poly.contains('x')) powers.add(1);
+
+    while (poly.contains('^')) {
+      int power;
+
+      while ((int.tryParse(poly[index + 1]) != null) || poly[index + 1] == '.') index++;
+
+      power = int.parse(poly.substring(poly.indexOf('^') + 1, index + 1));
+      try {
+        poly = poly.replaceAll('^${power.toInt()}', '');
+      } catch (e) {
+        poly = poly.replaceAll('^$power', '');
+      }
+
+      index = poly.indexOf('^');
+      powers.add(power);
+    }
+
+    degree = powers[0];
+    for (int i = 0; i < powers.length; i++) if (powers[i] > degree) degree = powers[i];
+
+    return degree;
+  }
+
+  static List<double> coefficents(String poly) {
+    int degree = findDegree(poly);
+    List<double> coefficents = List();
+
+    for (int i = 0; i <= degree; i++) {
+      if (i == 0) {
+        List<String> terms = poly.split('+');
+        List<String> finalTerms = List();
+        int constIndex;
+        bool hasConstTerm = false;
+
+        for (int i = 0; i < terms.length; i++) finalTerms.addAll(terms[i].split('-'));
+
+        finalTerms.forEach((element) {
+          if (!element.contains('x')) hasConstTerm = true;
+
+          if (hasConstTerm) constIndex = finalTerms.indexOf(element);
+        });
+
+        if (hasConstTerm) {
+          poly.lastIndexOf('-' + finalTerms[constIndex]) != -1
+              ? coefficents.add(double.parse('-' + finalTerms[constIndex]))
+              : coefficents.add(double.parse(finalTerms[constIndex]));
+        } else {
+          coefficents.add(0);
+        }
+      } else if (i == 1) {
+        if (poly.contains('x-') || poly.contains('x+')) {
+          int index = poly.lastIndexOf('x');
+
+          if (poly[index - 1] != '*') {
+            coefficents.add(1);
+          } else {
+            index = poly.lastIndexOf('*x');
+
+            while ((double.tryParse(poly[index - 1]) != null) || poly[index - 1] == '.') {
+              if (index == 1) {
+                index = 0;
+
+                break;
+              } else {
+                index--;
+              }
+            }
+
+            coefficents.add(double.parse(poly.substring(index, poly.lastIndexOf('*x'))));
+          }
+        } else
+          coefficents.add(0);
+      } else {
+        if (poly.contains('x^$i')) {
+          int index = poly.lastIndexOf('x^$i');
+
+          if (index == 0) {
+            coefficents.add(1);
+          } else if (poly[index - 1] != '*') {
+            coefficents.add(1);
+          } else {
+            index = poly.lastIndexOf('*x^$i');
+
+            while ((double.tryParse(poly[index - 1]) != null) || poly[index - 1] == '.') {
+              if (index == 1) {
+                break;
+              } else {
+                index--;
+              }
+            }
+
+            coefficents.add(double.parse(poly.substring(index - 1, poly.lastIndexOf('*x^$i'))));
+          }
+        } else
+          coefficents.add(0);
+      }
+    }
+
+    return List.from(coefficents.reversed);
+  }
+
+  static String product(String poly1Str, String poly2Str) {
+    List<double> poly1 = coefficents(poly1Str);
+    List<double> poly2 = coefficents(poly2Str);
+
+    List<double> prod = List(poly1.length + poly2.length - 1);
+
+    prod.fillRange(0, prod.length, 0);
+
+    for (int i = 0; i < poly1.length; i++) {
+      for (int j = 0; j < poly2.length; j++) {
+        prod[i + j] += poly1[i] * poly2[j];
+      }
+    }
+
+    String product = '';
+
+    for (int i = prod.length - 1; i >= 0; i--) {
+      product += prod[prod.length - i - 1].toString();
+      if (i != 0) product += i == 1 ? '*x' : '*x^$i';
+
+      if (i != 0) product += (prod[prod.length - i] < 0 ? '' : "+");
+    }
+
+    return product;
+  }
+
+  static String sumRule(String func) {
+    List<String> terms = func.split('+');
+    List<String> finalTerms = List();
+    List<String> diffTerms = List();
+
+    for (int i = 0; i < terms.length; i++) finalTerms.addAll(terms[i].split('-'));
+
+    diffTerms = finalTerms.map(Differentiation.derivative).toList();
+
+    for (int i = finalTerms.length - 1; i >= 0; i--) {
+      func = func.replaceFirst(finalTerms[i], diffTerms[i]);
+    }
+
+    func = func.replaceAll('-0', '');
+    func = func.replaceAll('+0', '');
+
+    print(func.replaceAll('.0', ''));
 
     return func;
   }

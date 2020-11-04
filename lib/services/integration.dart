@@ -1,6 +1,8 @@
 class Integration {
   static String integrate(String func) {
-    if (func.contains('sin') ||
+    if (func.contains('+'))
+      func = sumRule(func);
+    else if (func.contains('sin') ||
         func.contains('cos') ||
         func.contains('tan') ||
         func.contains('cot') ||
@@ -11,6 +13,27 @@ class Integration {
       func = intVarPow(func);
     else
       func = intPow(func);
+
+    return func;
+  }
+
+  static String sumRule(String func) {
+    List<String> terms = func.split('+');
+    List<String> finalTerms = List();
+    List<String> diffTerms = List();
+
+    for (int i = 0; i < terms.length; i++) finalTerms.addAll(terms[i].split('-'));
+
+    diffTerms = finalTerms.map(Integration.integrate).toList();
+
+    for (int i = finalTerms.length - 1; i >= 0; i--) {
+      func = func.replaceFirst(finalTerms[i], diffTerms[i]);
+    }
+
+    func = func.replaceAll('-0', '');
+    func = func.replaceAll('+0', '');
+
+    print(func.replaceAll('.0', ''));
 
     return func;
   }

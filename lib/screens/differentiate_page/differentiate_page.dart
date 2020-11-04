@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kalqlus/colors.dart';
 import 'package:kalqlus/components/background.dart';
 import 'package:kalqlus/components/card.dart';
-import 'package:kalqlus/screens/add_term_page/add_term_page.dart';
+import 'package:kalqlus/models/equation.dart';
+import 'package:kalqlus/screens/add_term_page/add_func_page.dart';
+import 'package:kalqlus/services/differenciation.dart';
 
 class DifferentiatePage extends StatefulWidget {
   @override
@@ -12,6 +14,22 @@ class DifferentiatePage extends StatefulWidget {
 }
 
 class _DifferentiatePageState extends State<DifferentiatePage> {
+  String input = '';
+  String output = '';
+
+  @override
+  void initState() {
+    setState(() {
+      input = Equation.equation;
+
+      output = Differentiation.derivative(Equation.equation).replaceAll('*', '');
+    });
+
+    print('Run');
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -53,13 +71,14 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AddTermPage(),
+                builder: (context) => AddFuncPage(),
+                maintainState: false,
               ),
             ),
             child: CustomCard(
               size: Size(size.width - 40, size.height * 0.1),
               child: Text(
-                'Add Term',
+                'Add Function',
                 style: GoogleFonts.lato(
                   fontSize: 40,
                   fontWeight: FontWeight.w600,
@@ -80,7 +99,7 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
                     fontSize: 40,
                     color: CustomColors.kFontColor,
                   ),
-                  child: CaTeX(r'\text{Input: }\frac{d}{dx}\text{ }(x^2 + 2x)'),
+                  child: CaTeX(r'\text{Input: }\frac{d}{dx}\text{ }(' + Equation.equation + ')'),
                 ),
               ),
             ),
@@ -97,7 +116,9 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
                     fontSize: 40,
                     color: CustomColors.kFontColor,
                   ),
-                  child: CaTeX(r'\text{Output: }2x + 2'),
+                  child: CaTeX(r'\text{Output: }' +
+                      Differentiation.derivative(Equation.equation == '' ? '1' : Equation.equation)
+                          .replaceAll('*', '')),
                 ),
               ),
             ),

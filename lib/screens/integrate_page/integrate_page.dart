@@ -1,9 +1,10 @@
+import 'package:catex/catex.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalqlus/colors.dart';
 import 'package:kalqlus/components/background.dart';
 import 'package:kalqlus/components/card.dart';
-import 'package:kalqlus/screens/add_term_page/add_term_page.dart';
+import 'package:kalqlus/screens/add_term_page/add_func_page.dart';
 
 class IntegratePage extends StatefulWidget {
   @override
@@ -52,13 +53,13 @@ class _IntegratePageState extends State<IntegratePage> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AddTermPage(),
+                builder: (context) => AddFuncPage(),
               ),
             ),
             child: CustomCard(
               size: Size(size.width - 40, size.height * 0.1),
               child: Text(
-                'Add Term',
+                'Add Function',
                 style: GoogleFonts.lato(
                   fontSize: 40,
                   fontWeight: FontWeight.w500,
@@ -73,13 +74,13 @@ class _IntegratePageState extends State<IntegratePage> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: SingleChildScrollView(
-                child: Text(
-                  'Input: ',
+                scrollDirection: Axis.horizontal,
+                child: DefaultTextStyle.merge(
                   style: GoogleFonts.lato(
                     fontSize: 40,
-                    fontWeight: FontWeight.w400,
                     color: CustomColors.kFontColor,
                   ),
+                  child: CaTeX(r'\text{Input: }\frac{d}{dx}\text{ }(x^2 + 2x)'),
                 ),
               ),
             ),
@@ -90,13 +91,13 @@ class _IntegratePageState extends State<IntegratePage> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: SingleChildScrollView(
-                child: Text(
-                  'Output: ',
+                scrollDirection: Axis.horizontal,
+                child: DefaultTextStyle.merge(
                   style: GoogleFonts.lato(
                     fontSize: 40,
-                    fontWeight: FontWeight.w400,
                     color: CustomColors.kFontColor,
                   ),
+                  child: CaTeX(r'\text{Input: }\frac{d}{dx}\text{ }(x^2 + 2x)'),
                 ),
               ),
             ),
