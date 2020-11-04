@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalqlus/colors.dart';
 import 'package:kalqlus/components/card.dart';
+import 'package:kalqlus/models/equation.dart';
 
 class CustomTextField extends StatefulWidget {
   final ValueChanged<String> onSubmitted;
@@ -13,6 +14,7 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
+  TextEditingController controller = TextEditingController(text: Equation.equation);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -22,6 +24,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: TextField(
+          controller: controller,
           decoration: InputDecoration(
             hintText: 'Enter function (1 term)',
             border: InputBorder.none,

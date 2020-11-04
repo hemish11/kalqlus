@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
               context,
               MaterialPageRoute(
                 builder: (context) => DifferentiatePage(),
+                maintainState: false,
               ),
             ),
           ),
@@ -47,6 +48,7 @@ class _HomePageState extends State<HomePage> {
               context,
               MaterialPageRoute(
                 builder: (context) => IntegratePage(),
+                maintainState: false,
               ),
             ),
           ),

@@ -33,8 +33,6 @@ class Integration {
     func = func.replaceAll('-0', '');
     func = func.replaceAll('+0', '');
 
-    print(func.replaceAll('.0', ''));
-
     return func;
   }
 
