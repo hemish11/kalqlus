@@ -112,7 +112,15 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
                       fontSize: 40,
                       color: CustomColors.kFontColor,
                     ),
-                    child: CaTeX(r'\text{Input: }\frac{d}{dx}\text{ }(' + Equation.equation + ')'),
+                    child: CaTeX(r'\text{Input: }\frac{d}{dx}\text{ }(' +
+                        Equation.equation
+                            .replaceAll('*1.0', '')
+                            .replaceAll('*1', '')
+                            .replaceAll('1.0*', '')
+                            .replaceAll('1*', '')
+                            .replaceAll('^1.0', '')
+                            .replaceAll('^1', '') +
+                        ')'),
                   ),
                 ),
               ),
