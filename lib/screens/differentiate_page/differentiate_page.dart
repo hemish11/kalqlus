@@ -68,11 +68,11 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
                   ),
                 ),
                 CustomCard(
-                  size: Size(size.width * 0.85 - size.height * 0.1 - 20, size.height * 0.1),
+                  size: Size(size.width * 0.85 - size.height * 0.1 - 30, size.height * 0.1),
                   child: Text(
                     'KalQlus',
                     style: GoogleFonts.lato(
-                      fontSize: 40,
+                      fontSize: 37,
                       fontWeight: FontWeight.w600,
                       color: CustomColors.kFontColor,
                     ),
@@ -107,6 +107,7 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
                 padding: const EdgeInsets.all(20.0),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
                   child: DefaultTextStyle.merge(
                     style: GoogleFonts.lato(
                       fontSize: 40,
@@ -132,6 +133,7 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
                 padding: const EdgeInsets.all(20.0),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
                   child: DefaultTextStyle.merge(
                     style: GoogleFonts.lato(
                       fontSize: 40,

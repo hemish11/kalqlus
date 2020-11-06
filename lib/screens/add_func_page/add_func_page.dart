@@ -51,8 +51,8 @@ class _AddFuncPageState extends State<AddFuncPage> {
               ),
               CustomTextField(
                 onSubmitted: (val) {
-                  if (widget.prevPage == 'Differentiate') Equation.diffEquation = Differentiation.derivative(val);
-                  if (widget.prevPage == 'Integrate') Equation.intEquation = Integration.integrate(val);
+                  Equation.diffEquation = Differentiation.derivative(val);
+                  Equation.intEquation = Integration.integrate(val);
 
                   setState(() {
                     Equation.equation = val;
@@ -66,6 +66,7 @@ class _AddFuncPageState extends State<AddFuncPage> {
                   padding: const EdgeInsets.all(20.0),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
                     child: DefaultTextStyle.merge(
                       style: GoogleFonts.lato(
                         fontSize: 40,
