@@ -21,9 +21,9 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
   @override
   void initState() {
     setState(() {
-      input = Equation.equation;
+      input = Equation.toLatex(Equation.equation);
 
-      output = Differentiation.derivative(Equation.equation).replaceAll('*', '');
+      output = Equation.toLatex(Differentiation.derivative(Equation.equation));
     });
 
     super.initState();
@@ -113,15 +113,7 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
                       fontSize: 40,
                       color: CustomColors.kFontColor,
                     ),
-                    child: CaTeX(r'\text{Input: }\frac{d}{dx}\text{ }(' +
-                        Equation.equation
-                            .replaceAll('*1.0', '')
-                            .replaceAll('*1', '')
-                            .replaceAll('1.0*', '')
-                            .replaceAll('1*', '')
-                            .replaceAll('^1.0', '')
-                            .replaceAll('^1', '') +
-                        ')'),
+                    child: CaTeX(r'\text{Input: }\frac{d}{dx}\text{ }(' + input + ')'),
                   ),
                 ),
               ),
@@ -139,9 +131,7 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
                       fontSize: 40,
                       color: CustomColors.kFontColor,
                     ),
-                    child: CaTeX(r'\text{Output: }' +
-                        (Equation.toLatex(Equation.diffEquation) == '' ? '1' : Equation.toLatex(Equation.diffEquation))
-                            .replaceAll('*', '')),
+                    child: CaTeX(r'\text{Output: }' + output),
                   ),
                 ),
               ),

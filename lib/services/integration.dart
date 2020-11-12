@@ -9,9 +9,14 @@ class Integration {
         func.contains('sec') ||
         func.contains('csc'))
       func = intTrig(func);
-    else if (func.contains('^x'))
-      func = intVarPow(func);
-    else
+    else if (func.contains('^x') || (func.contains('/'))) {
+      if (func.contains('e')) {
+      } else if (func.split('/')[1].contains('x')) {
+        func = intVarPow(func);
+      } else {
+        func = intPow(func);
+      }
+    } else
       func = intPow(func);
 
     return func;
@@ -20,14 +25,32 @@ class Integration {
   static String sumRule(String func) {
     List<String> terms = func.split('+');
     List<String> finalTerms = List();
-    List<String> diffTerms = List();
+    List<String> intTerms = List();
+    List<String> operators = List();
 
     for (int i = 0; i < terms.length; i++) finalTerms.addAll(terms[i].split('-'));
 
-    diffTerms = finalTerms.map(Integration.integrate).toList();
+    intTerms = finalTerms
+        .map((val) => Integration.integrate(val)
+            .replaceAll('.0', '')
+            .replaceAll('^1.0', '')
+            .replaceAll('^1', '')
+            .replaceAll('*1.0', '')
+            .replaceAll('*1', '')
+            .replaceAll('1.0*', '')
+            .replaceAll('1*', '')
+            .replaceAll('+0', '')
+            .replaceAll('0+', ''))
+        .toList();
 
-    for (int i = finalTerms.length - 1; i >= 0; i--) {
-      func = func.replaceFirst(finalTerms[i], diffTerms[i]);
+    for (int i = 0; i < finalTerms.length - 1; i++) {
+      operators.add(func.split(finalTerms[i])[1].split(finalTerms[i + 1])[0]);
+    }
+
+    func = intTerms[0];
+
+    for (int i = 0; i < operators.length; i++) {
+      func += operators[i] + intTerms[i + 1];
     }
 
     func = func.replaceAll('-0', '');
@@ -115,7 +138,7 @@ class Integration {
   }
 
   static String intVarPow(String func) {
-    if (!func.contains('e')) func = func + '/' + func.split('^')[0];
+    if (func.contains('x') && !func.contains('e')) func = func.split('x')[0] + 'ln|x|';
 
     return func;
   }

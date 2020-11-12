@@ -7,6 +7,7 @@ import 'package:kalqlus/components/card.dart';
 import 'package:kalqlus/models/equation.dart';
 import 'package:kalqlus/screens/add_func_page/add_func_page.dart';
 import 'package:kalqlus/screens/home_page/home_page.dart';
+import 'package:kalqlus/services/integration.dart';
 
 class IntegratePage extends StatefulWidget {
   @override
@@ -14,6 +15,24 @@ class IntegratePage extends StatefulWidget {
 }
 
 class _IntegratePageState extends State<IntegratePage> {
+  String input = '';
+  String output = '';
+
+  @override
+  void initState() {
+    setState(() {
+      input = Equation.toLatex(Equation.equation);
+
+      if (Equation.equation.contains(')*(') || Equation.equation.contains(')/(')) {
+        output = 'Not Possible at current state';
+      } else {
+        output = Equation.toLatex(Integration.integrate(Equation.equation));
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -98,7 +117,7 @@ class _IntegratePageState extends State<IntegratePage> {
                       fontSize: 40,
                       color: CustomColors.kFontColor,
                     ),
-                    child: CaTeX(r'\text{Input: }∫\text{ }(' + Equation.toLatex(Equation.equation) + ')dx'),
+                    child: CaTeX(r'\text{Input: }∫\text{ }(' + input + ')dx'),
                   ),
                 ),
               ),
@@ -117,7 +136,7 @@ class _IntegratePageState extends State<IntegratePage> {
                       color: CustomColors.kFontColor,
                     ),
                     child: CaTeX(
-                      r'\text{Output: }' + Equation.toLatex(Equation.intEquation).replaceAll('*', '') + '+c',
+                      r'\text{Output: }' + output + (output == 'Not Possible at current state' ? '' : '+c'),
                     ),
                   ),
                 ),

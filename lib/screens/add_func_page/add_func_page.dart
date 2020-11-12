@@ -8,8 +8,6 @@ import 'package:kalqlus/models/equation.dart';
 import 'package:kalqlus/screens/add_func_page/components/text_field.dart';
 import 'package:kalqlus/screens/differentiate_page/differentiate_page.dart';
 import 'package:kalqlus/screens/integrate_page/integrate_page.dart';
-import 'package:kalqlus/services/differenciation.dart';
-import 'package:kalqlus/services/integration.dart';
 
 class AddFuncPage extends StatefulWidget {
   final String prevPage;
@@ -50,14 +48,7 @@ class _AddFuncPageState extends State<AddFuncPage> {
                 ),
               ),
               CustomTextField(
-                onSubmitted: (val) {
-                  Equation.diffEquation = Differentiation.derivative(val);
-                  Equation.intEquation = Integration.integrate(val);
-
-                  setState(() {
-                    Equation.equation = val;
-                  });
-                },
+                onSubmitted: (val) => setState(() => Equation.equation = val),
               ),
               CustomCard(
                 size: Size(size.width * 0.9, size.height * 0.2),
@@ -72,7 +63,19 @@ class _AddFuncPageState extends State<AddFuncPage> {
                         fontSize: 40,
                         color: CustomColors.kFontColor,
                       ),
-                      child: CaTeX(Equation.toLatex(Equation.equation)),
+                      child: CaTeX(
+                        Equation.equation
+                            .replaceAll('.0', '')
+                            .replaceAll('^1.0', '')
+                            .replaceAll('^1', '')
+                            .replaceAll('*1.0', '')
+                            .replaceAll('*1', '')
+                            .replaceAll('1.0*', '')
+                            .replaceAll('1*', '')
+                            .replaceAll('+0', '')
+                            .replaceAll('0+', '')
+                            .replaceAll('*', ''),
+                      ),
                     ),
                   ),
                 ),

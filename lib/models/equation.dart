@@ -1,16 +1,30 @@
 class Equation {
   static String equation = '';
-  static String diffEquation = '';
-  static String intEquation = '';
 
-  static String toLatex(String equation) {
-    if (!(equation.contains('sin') ||
-        equation.contains('cos') ||
-        equation.contains('tan') ||
-        equation.contains('cot') ||
-        equation.contains('sec') ||
-        equation.contains('csc')))
-      return equation.replaceAll(')/(', '}{').replaceAll('(', '\\frac{').replaceAll(')', '}');
-      else return equation;
-  }
+  static String toLatex(String equation) => equation.contains(')/(')
+      ? equation
+          .replaceAll('.0', '')
+          .replaceAll('^1.0', '')
+          .replaceAll('^1', '')
+          .replaceAll('*1.0', '')
+          .replaceAll('*1', '')
+          .replaceAll('1.0*', '')
+          .replaceAll('1*', '')
+          .replaceAll('+0', '')
+          .replaceAll('0+', '')
+          .replaceAll('*', '')
+          .replaceAll(')/(', '}{')
+          .replaceAll('(', '\\frac{')
+          .replaceAll(')', '}')
+      : equation
+          .replaceAll('.0', '')
+          .replaceAll('^1.0', '')
+          .replaceAll('^1', '')
+          .replaceAll('*1.0', '')
+          .replaceAll('*1', '')
+          .replaceAll('1.0*', '')
+          .replaceAll('1*', '')
+          .replaceAll('+0', '')
+          .replaceAll('0+', '')
+          .replaceAll('*', '');
 }

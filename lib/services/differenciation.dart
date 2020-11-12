@@ -1,16 +1,32 @@
+import 'dart:math';
+
 class Differentiation {
   static String derivative(String func) {
-    if (func.contains('sin') ||
-        func.contains('cos') ||
-        func.contains('tan') ||
-        func.contains('cot') ||
-        func.contains('sec') ||
-        func.contains('csc'))
-      func = diffTrig(func);
-    else if (func.contains('^x'))
-      func = diffVarPow(func);
-    else
-      func = diffPow(func);
+    if (func.contains(')*(')) {
+      String a = func.split(')*(')[0].split('(')[1];
+      String b = func.split(')*(')[1].split(')')[0];
+
+      func = sum(product(a, derivative(b)), product(derivative(a), b));
+    } else if (func.contains(')/(')) {
+      String a = func.split(')/(')[0].split('(')[1];
+      String b = func.split(')/(')[1].split(')')[0];
+
+      func = '(' + difference(product(derivative(a), b), product(a, derivative(b))) + ')/(' + product(b, b) + ')';
+    } else if (func.contains('+') || func.contains('-')) {
+      func = sumRule(func);
+    } else {
+      if (func.contains('sin') ||
+          func.contains('cos') ||
+          func.contains('tan') ||
+          func.contains('cot') ||
+          func.contains('sec') ||
+          func.contains('csc'))
+        func = diffTrig(func);
+      else if (func.contains('^x'))
+        func = diffVarPow(func);
+      else
+        func = diffPow(func);
+    }
 
     return func;
   }
@@ -111,6 +127,7 @@ class Differentiation {
     poly += ' ';
 
     if (!poly.contains('^') && poly.contains('x')) powers.add(1);
+    if (!(poly.contains('^') && poly.contains('x'))) powers.add(0);
 
     while (poly.contains('^')) {
       int power;
@@ -164,23 +181,26 @@ class Differentiation {
         if (poly.contains('x-') || poly.contains('x+')) {
           int index = poly.lastIndexOf('x');
 
-          if (poly[index - 1] != '*') {
-            coefficents.add(1);
-          } else {
-            index = poly.lastIndexOf('*x');
+          if (index != 0) {
+            if (poly[index - 1] != '*') {
+              coefficents.add(1);
+            } else {
+              index = poly.lastIndexOf('*x');
 
-            while ((double.tryParse(poly[index - 1]) != null) || poly[index - 1] == '.') {
-              if (index == 1) {
-                index = 0;
+              while ((double.tryParse(poly[index - 1]) != null) || poly[index - 1] == '.') {
+                if (index == 1) {
+                  index = 0;
 
-                break;
-              } else {
-                index--;
+                  break;
+                } else {
+                  index--;
+                }
               }
-            }
 
-            coefficents.add(double.parse(poly.substring(index, poly.lastIndexOf('*x'))));
-          }
+              coefficents.add(double.parse(poly.substring(index, poly.lastIndexOf('*x'))));
+            }
+          } else
+            coefficents.add(1);
         } else
           coefficents.add(0);
       } else {
@@ -226,29 +246,111 @@ class Differentiation {
       }
     }
 
-    String product = '';
+    String sum = '';
 
     for (int i = prod.length - 1; i >= 0; i--) {
-      product += prod[prod.length - i - 1].toString();
-      if (i != 0) product += i == 1 ? '*x' : '*x^$i';
+      sum += prod[prod.length - i - 1].toString();
+      if (i != 0) sum += i == 1 ? '*x' : '*x^$i';
 
-      if (i != 0) product += (prod[prod.length - i] < 0 ? '' : "+");
+      if (i != 0) sum += (prod[prod.length - i] < 0 ? '' : "+");
     }
 
-    return product;
+    return sum;
+  }
+
+  static String sum(String poly1Str, String poly2Str) {
+    List<double> poly1 = coefficents(poly1Str);
+    List<double> poly2 = coefficents(poly2Str);
+
+    List<double> sum = List();
+
+    poly1 = poly1.reversed.toList();
+    poly2 = poly2.reversed.toList();
+
+    while (poly1.length != poly2.length) {
+      if (poly1.length > poly2.length)
+        poly2.add(0);
+      else
+        poly1.add(0);
+    }
+
+    for (int i = max(poly1.length, poly2.length) - 1; i >= 0; i--) sum.add(poly1[i] + poly2[i]);
+
+    String answer = '';
+
+    for (int i = sum.length - 1; i >= 0; i--) {
+      answer += sum[sum.length - i - 1].toString();
+      if (i != 0) answer += i == 1 ? '*x' : '*x^$i';
+
+      if (i != 0) answer += (sum[sum.length - i] < 0 ? '' : "+");
+    }
+
+    return answer;
+  }
+
+  static String difference(String poly1Str, String poly2Str) {
+    List<double> poly1 = coefficents(poly1Str);
+    List<double> poly2 = coefficents(poly2Str);
+
+    List<double> sum = List();
+
+    poly1 = poly1.reversed.toList();
+    poly2 = poly2.reversed.toList();
+
+    while (poly1.length != poly2.length) {
+      if (poly1.length > poly2.length)
+        poly2.add(0);
+      else
+        poly1.add(0);
+    }
+
+    for (int i = max(poly1.length, poly2.length) - 1; i >= 0; i--) sum.add(poly1[i] - poly2[i]);
+
+    String answer = '';
+
+    print(poly1.reversed);
+    print(poly2.reversed);
+    print(sum);
+
+    for (int i = sum.length - 1; i >= 0; i--) {
+      answer += sum[sum.length - i - 1].toString();
+      if (i != 0) answer += i == 1 ? '*x' : '*x^$i';
+
+      if (i != 0) answer += (sum[sum.length - i] < 0 ? '' : "+");
+    }
+
+    return answer;
   }
 
   static String sumRule(String func) {
     List<String> terms = func.split('+');
     List<String> finalTerms = List();
     List<String> diffTerms = List();
+    List<String> operators = List();
 
     for (int i = 0; i < terms.length; i++) finalTerms.addAll(terms[i].split('-'));
 
-    diffTerms = finalTerms.map(Differentiation.derivative).toList();
+    diffTerms = finalTerms
+        .map((val) => Differentiation.derivative(val)
+            .replaceAll('.0', '')
+            .replaceAll('^1.0', '')
+            .replaceAll('^1', '')
+            .replaceAll('*1.0', '')
+            .replaceAll('*1', '')
+            .replaceAll('1.0*', '')
+            .replaceAll('1*', '')
+            .replaceAll('+0', '')
+            .replaceAll('0+', ''))
+        .toList();
 
-    for (int i = finalTerms.length - 1; i >= 0; i--) {
-      func = func.replaceFirst(finalTerms[i], diffTerms[i]);
+    for (int i = 0; i < finalTerms.length - 1; i++) {
+      operators.add(func.split(finalTerms[i])[1].split(finalTerms[i + 1])[0]);
+    }
+
+    func = diffTerms[0];
+
+    for (int i = 0; i < operators.length; i++) {
+      func += operators[i] + diffTerms[i + 1];
     }
 
     func = func.replaceAll('-0', '');
