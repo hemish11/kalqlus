@@ -23,7 +23,11 @@ class _DifferentiatePageState extends State<DifferentiatePage> {
     setState(() {
       input = Equation.toLatex(Equation.equation);
 
-      output = Equation.toLatex(Differentiation.derivative(Equation.equation));
+      try {
+        output = Equation.toLatex(Differentiation.derivative(Equation.equation));
+      } catch (e) {
+        output = 'Not Possible at current state';
+      }
     });
 
     super.initState();

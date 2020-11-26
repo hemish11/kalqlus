@@ -26,7 +26,11 @@ class _IntegratePageState extends State<IntegratePage> {
       if (Equation.equation.contains(')*(') || Equation.equation.contains(')/(')) {
         output = 'Not Possible at current state';
       } else {
-        output = Equation.toLatex(Integration.integrate(Equation.equation));
+        try {
+          output = Equation.toLatex(Integration.integrate(Equation.equation));
+        } catch (e) {
+          output = 'Not Possible at current state';
+        }
       }
     });
 
