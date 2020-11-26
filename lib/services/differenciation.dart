@@ -111,39 +111,66 @@ class Differentiation {
 
   static String diffTrig(String func) {
     String angle = func.substring(func.indexOf('(') + 1, func.lastIndexOf(')'));
+    String differentiateAngle = derivative(angle);
 
     if (double.tryParse(angle) != null) {
       func = '0';
     } else {
       if (!angle.contains('^')) angle += '^1';
 
-      int power = (int.parse(angle.split('^')[1] ?? 1)) * 2;
+      int power;
+
+      if (func.contains('asin') ||
+          func.contains('acos') ||
+          func.contains('atan') ||
+          func.contains('acot') ||
+          func.contains('asec') ||
+          func.contains('acsc')) power = (int.parse(angle.split('^')[1] ?? 1)) * 2;
       String base = angle.split('^')[0];
 
-      if (func.contains('asin'))
-        func = derivative(angle) + '/sqrt(1-$base^$power)';
-      else if (func.contains('acos'))
-        func = '-' + derivative(angle) + '/sqrt(1-$base^$power)';
-      else if (func.contains('atan'))
-        func = derivative(angle) + '/($base^$power+1)';
-      else if (func.contains('acot'))
-        func = '-' + derivative(angle) + '/($base^$power+1)';
-      else if (func.contains('asec'))
-        func = derivative(angle) + '/|x|*sqrt(1-$base^$power)';
-      else if (func.contains('acsc'))
-        func = '-' + derivative(angle) + '/|x|*sqrt(1-$base^$power)';
-      else if (func.contains('sin'))
-        func = derivative(angle) + '*cos($angle)';
-      else if (func.contains('cos'))
-        func = '-' + derivative(angle) + '*sin($angle)';
-      else if (func.contains('tan'))
-        func = '(' + derivative(angle) + '*sec($angle))^2';
-      else if (func.contains('cot'))
-        func = '-(' + derivative(angle) + '*csc($angle))^2';
-      else if (func.contains('sec'))
-        func = derivative(angle) + '*' + 'sec($angle)*tan($angle)';
-      else
-        func = '-' + derivative(angle) + '*' + 'csc($angle)*cot($angle)';
+      if (func.contains('asin')) {
+        func = '$differentiateAngle/sqrt(1-$base^$power)';
+      } else if (func.contains('acos')) {
+        func = '-' + '$differentiateAngle/sqrt(1-$base^$power)';
+      } else if (func.contains('atan')) {
+        func = '$differentiateAngle/($base^$power+1)';
+      } else if (func.contains('acot')) {
+        func = '-' + '$differentiateAngle/($base^$power+1)';
+      } else if (func.contains('asec')) {
+        func = '$differentiateAngle/|x|*sqrt(1-$base^$power)';
+      } else if (func.contains('acsc')) {
+        func = '-' + '$differentiateAngle/|x|*sqrt(1-$base^$power)';
+      } else if (func.contains('sin')) {
+        if (angle.contains('+') || angle.contains('-'))
+          func = '($differentiateAngle)*cos($angle)';
+        else
+          func = '$differentiateAngle*cos($angle)';
+      } else if (func.contains('cos')) {
+        if (angle.contains('+') || angle.contains('-'))
+          func = '-($differentiateAngle)*sin($angle)';
+        else
+          func = '-$differentiateAngle*sin($angle)';
+      } else if (func.contains('tan')) {
+        if (angle.contains('+') || angle.contains('-'))
+          func = '(($differentiateAngle)*sec($angle))^2';
+        else
+          func = '($differentiateAngle*sec($angle))^2';
+      } else if (func.contains('cot')) {
+        if (angle.contains('+') || angle.contains('-'))
+          func = '-(($differentiateAngle)*csc($angle))^2';
+        else
+          func = '-($differentiateAngle*csc($angle))^2';
+      } else if (func.contains('sec')) {
+        if (angle.contains('+') || angle.contains('-'))
+          func = '($differentiateAngle)*sec($angle)*tan($angle)';
+        else
+          func = '$differentiateAngle*sec($angle)*tan($angle)';
+      } else {
+        if (angle.contains('+') || angle.contains('-'))
+          func = '-($differentiateAngle)*csc($angle)*cot($angle)';
+        else
+          func = '-$differentiateAngle*csc($angle)*cot($angle)';
+      }
     }
 
     if (func.substring(0, 4) == '-(1*') {
