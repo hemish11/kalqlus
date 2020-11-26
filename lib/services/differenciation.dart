@@ -12,7 +12,17 @@ class Differentiation {
       String b = func.split(')/(')[1].split(')')[0];
 
       func = '(' + difference(product(derivative(a), b), product(a, derivative(b))) + ')/(' + product(b, b) + ')';
-    } else if (func.contains('+') || func.contains('-')) {
+    } else if ((func.contains('+') || func.contains('-')) &&
+        !(func.contains('ln') ||
+            func.contains('log') ||
+            func.contains('sin') ||
+            func.contains('cos') ||
+            func.contains('tan') ||
+            func.contains('cot') ||
+            func.contains('sec') ||
+            func.contains('csc') ||
+            func.contains('/-') ||
+            func[0] == '-')) {
       func = sumRule(func);
     } else {
       if (func.contains('sin') ||
@@ -24,6 +34,8 @@ class Differentiation {
         func = diffTrig(func);
       else if (func.contains('^x'))
         func = diffVarPow(func);
+      else if (func.contains('ln') || func.contains('log'))
+        func = diffLog(func);
       else
         func = diffPow(func);
     }
@@ -31,32 +43,69 @@ class Differentiation {
     return func;
   }
 
+  static int hcf(int a, int b) {
+    if (a == 0) return b;
+    if (b == 0) return a;
+    if (a == b) return a;
+    if (a > b) return hcf(a - b, b);
+
+    return hcf(a, b - a);
+  }
+
   static String diffPow(String func) {
-    if (double.tryParse(func) != null) {
-      func = '0';
-    } else {
-      if (!func.contains('^')) func += '^1';
+    if (func.contains('/') && func.split('/')[1].contains('x')) {
+      String denominator = func.split('/')[1];
+      String numerator = func.split('/')[0];
 
-      String base = func.split('^')[0];
-      double pow = double.parse(func.split('^')[1] ?? 0);
+      if (!denominator.contains('^')) denominator += '^1';
 
-      if (pow - 1 == 1)
-        func = '$pow*$base';
-      else if (pow - 1 == 0 && func.contains('*'))
-        func = '${base.substring(0, base.length - 2)}';
-      else if (pow - 1 == 0)
-        func = pow.toString();
+      String base = denominator.split('^')[0];
+      double pow = double.parse(denominator.split('^')[1] ?? 0);
+      int a;
+      int b;
+      int c;
+
+      a = int.parse(numerator) * pow.toInt();
+      if (base.contains('*'))
+        b = int.parse(base.split('*')[0]);
+      else if (base.contains('-'))
+        b = -1;
       else
-        func = '$pow*$base^${pow - 1}';
+        b = 1;
 
-      List<String> prodList = func.split('*');
-      double prod = 1;
+      c = hcf(a.abs(), b.abs());
 
-      for (int i = 0; i < prodList.length - 1; i++) prod *= double.parse(prodList[i]);
+      if (func[0] == '-' || b < 0) {
+        func = '${a ~/ c}/${(b ~/ c).abs()}*x^${pow + 1}';
+      } else {
+        func = '-${a ~/ c}/${b ~/ c}*x^${pow + 1}';
+      }
+    } else {
+      if (double.tryParse(func) != null) {
+        func = '0';
+      } else {
+        if (!func.contains('^')) func += '^1';
 
-      func = prod == 1 ? prodList[prodList.length - 1] : '$prod*${prodList[prodList.length - 1]}';
+        String base = func.split('^')[0];
+        double pow = double.parse(func.split('^')[1] ?? 0);
+
+        if (pow - 1 == 1)
+          func = '$pow*$base';
+        else if (pow - 1 == 0 && func.contains('*'))
+          func = '${base.substring(0, base.length - 2)}';
+        else if (pow - 1 == 0)
+          func = pow.toString();
+        else
+          func = '$pow*$base^${pow - 1}';
+
+        List<String> prodList = func.split('*');
+        double prod = 1;
+
+        for (int i = 0; i < prodList.length - 1; i++) prod *= double.parse(prodList[i]);
+
+        func = prod == 1 ? prodList[prodList.length - 1] : '$prod*${prodList[prodList.length - 1]}';
+      }
     }
-
     return func;
   }
 
@@ -71,17 +120,17 @@ class Differentiation {
       int power = (int.parse(angle.split('^')[1] ?? 1)) * 2;
       String base = angle.split('^')[0];
 
-      if (func.contains('sin^-1'))
+      if (func.contains('asin'))
         func = derivative(angle) + '/sqrt(1-$base^$power)';
-      else if (func.contains('cos^-1'))
+      else if (func.contains('acos'))
         func = '-' + derivative(angle) + '/sqrt(1-$base^$power)';
-      else if (func.contains('tan^-1'))
+      else if (func.contains('atan'))
         func = derivative(angle) + '/($base^$power+1)';
-      else if (func.contains('cot^-1'))
+      else if (func.contains('acot'))
         func = '-' + derivative(angle) + '/($base^$power+1)';
-      else if (func.contains('sec^-1'))
+      else if (func.contains('asec'))
         func = derivative(angle) + '/|x|*sqrt(1-$base^$power)';
-      else if (func.contains('csc^-1'))
+      else if (func.contains('acsc'))
         func = '-' + derivative(angle) + '/|x|*sqrt(1-$base^$power)';
       else if (func.contains('sin'))
         func = derivative(angle) + '*cos($angle)';
@@ -106,6 +155,40 @@ class Differentiation {
     }
 
     return func;
+  }
+
+  static String diffLog(String func) {
+    if (func.contains('ln')) {
+      if (func.contains('+') || func.contains('-')) {
+        String x = func.split('(')[1].split(')')[0];
+
+        return derivative(x) + '/$x';
+      } else {
+        if (func.contains('^')) {
+          String pow = func.split('^')[1].split(')')[0];
+
+          return '$pow/x';
+        }
+
+        return '1/x';
+      }
+    } else {
+      String base = func.replaceAll('log', '').split('(')[0];
+
+      if (func.contains('+') || func.contains('-')) {
+        String x = func.split('(')[1].split(')')[0];
+
+        return derivative(x) + '/ln($base)*[$x]';
+      } else {
+        if (func.contains('^')) {
+          String pow = func.split('^')[1].split(')')[0];
+
+          return '$pow/x*ln($base)';
+        }
+
+        return '1/x*ln($base)';
+      }
+    }
   }
 
   static String diffVarPow(String func) {
@@ -359,3 +442,6 @@ class Differentiation {
     return func;
   }
 }
+
+//TODO: Make proper Sign operators
+//TODO: Add ln formulas
