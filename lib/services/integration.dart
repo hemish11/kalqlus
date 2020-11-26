@@ -138,7 +138,7 @@ class Integration {
   }
 
   static String intVarPow(String func) {
-    if (func.contains('x') && !func.contains('e')) func = func.split('x')[0] + 'ln|x|';
+    if (!func.contains('e')) func = func.split('/')[0] + '*ln|x|';
 
     return func;
   }
