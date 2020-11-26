@@ -26,7 +26,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         child: TextField(
           controller: controller,
           decoration: InputDecoration(
-            hintText: 'Enter function (1 term)',
+            hintText: 'Enter function',
             border: InputBorder.none,
           ),
           cursorColor: CustomColors.kAccent,
