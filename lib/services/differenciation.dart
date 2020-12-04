@@ -4,7 +4,7 @@ class Differentiation {
   static String derivative(String func) {
     if (func.contains(')*(')) {
       String a = func.split(')*(')[0].split('(')[1];
-      String b = func.split(')*(')[1].split(')')[0];
+      String b = func.split(')*(')[1].replaceFirst('(', '');
 
       func = sum(product(a, derivative(b)), product(derivative(a), b));
     } else if (func.contains(')/(')) {
@@ -25,14 +25,24 @@ class Differentiation {
             func[0] == '-')) {
       func = sumRule(func);
     } else {
-      if (func.contains('sin') ||
-          func.contains('cos') ||
-          func.contains('tan') ||
-          func.contains('cot') ||
-          func.contains('sec') ||
-          func.contains('csc'))
+      if ((func.contains('sin') ||
+              func.contains('cos') ||
+              func.contains('tan') ||
+              func.contains('cot') ||
+              func.contains('sec') ||
+              func.contains('csc')) &&
+          !(func.contains('^sin') ||
+              func.contains('^cos') ||
+              func.contains('^tan') ||
+              func.contains('^cot') ||
+              func.contains('^sec') ||
+              func.contains('^csc')))
         func = diffTrig(func);
-      else if (func.contains('^x'))
+      else if (func.contains('^x') ||
+          func.contains('^s') ||
+          func.contains('^c') ||
+          func.contains('^t') ||
+          func.contains('^a'))
         func = diffVarPow(func);
       else if (func.contains('ln') || func.contains('log'))
         func = diffLog(func);
@@ -110,7 +120,7 @@ class Differentiation {
   }
 
   static String diffTrig(String func) {
-    String angle = func.substring(func.indexOf('(') + 1, func.lastIndexOf(')'));
+    String angle = func.substring(func.lastIndexOf('(') + 1, func.indexOf(')'));
     String differentiateAngle = derivative(angle);
 
     if (double.tryParse(angle) != null) {
@@ -223,7 +233,7 @@ class Differentiation {
     String pow = func.split('^')[1] ?? 1;
 
     if (base != 'e') {
-      func = 'ln($base)*$base^$pow';
+      func = '${derivative(pow)}*ln($base)*$base^$pow';
     }
 
     return func;
